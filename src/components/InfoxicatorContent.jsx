@@ -1,47 +1,70 @@
-import React from 'react';
-import { holocronModule } from 'holocron';
+import React, { Fragment } from 'react';
+import { compose } from 'redux';
+import { RenderModule, holocronModule, loadModule } from 'holocron';
+import { configureIguazuSSR } from 'iguazu-holocron';
+import { connectAsync } from 'iguazu';
 import PropTypes from 'prop-types';
-import reducer, { REQUEST, SUCCESS, FAILURE } from '../duck';
+import { queryProcedureResult } from 'iguazu-rpc';
+import Helmet from 'react-helmet';
+import reducer from '../duck';
 import BlogPost from './BlogPost';
 
-const InfoxicatorContent = ({ moduleState }) => {
-  if (moduleState.isLoading) return <div className="button is-loading">Loading</div>;
-  if (moduleState.error) return <h1>Something went wrong...</h1>;
+const InfoxicatorContent = ({ isLoading, loadedWithErrors, post }) => {
+
+  if (isLoading()) return <div className="button is-loading">Loading</div>;
+  if (loadedWithErrors()) return <h1>Something went wrong...</h1>;
   return (
-    <div className="container is-fluid">
-      <BlogPost post={moduleState.data.post[0]} />
-    </div>
+    <Fragment>
+      <Helmet
+        link={[
+          { rel: 'stylesheet', href: 'https://cdnjs.cloudflare.com/ajax/libs/prism/1.19.0/themes/prism-tomorrow.min.css' },
+        ]}
+        script={[{ src: 'https://cdnjs.cloudflare.com/ajax/libs/prism/1.19.0/prism.min.js', type: 'text/javascript' }]}
+      />
+      <div className="container is-fluid">
+        <BlogPost post={post[0]} />
+        {/* <RenderModule
+          moduleName="infoxicator-main"
+          props={{}}
+        /> */}
+      </div>
+    </Fragment>
   );
 };
-InfoxicatorContent.loadModuleData = async ({ store, fetchClient, ownProps }) => {
-  store.dispatch({ type: REQUEST });
-  try {
-    const fastRes = await fetchClient(`http://www.infoxication.net/wp-json/wp/v2/posts/?slug=${ownProps.params.postSlug}`);
-    const post = await fastRes.json();
-    store.dispatch({
-      type: SUCCESS,
-      data: {
-        post,
-      },
-    });
-  } catch (err) {
-    store.dispatch({
-      type: FAILURE,
-      error: err,
-    });
-  }
-};
+
+function loadDataAsProps({ store: { dispatch }, ownProps: { params: { postSlug } } }) {
+  const apiUrl = `http://www.infoxication.net/wp-json/wp/v2/posts/?slug=${postSlug}`;
+  return {
+    post: () => dispatch(queryProcedureResult({ procedureName: 'readPost', args: { api: apiUrl } })),
+  };
+}
+
+loadDataAsProps.ssr = true;
+InfoxicatorContent.loadDataAsProps = loadDataAsProps;
+
+if (!global.BROWSER) {
+  InfoxicatorContent.loadModuleData = configureIguazuSSR;
+}
+
 
 InfoxicatorContent.propTypes = {
-  moduleState: PropTypes.shape({
-    isLoading: PropTypes.bool.isRequired,
-    isComplete: PropTypes.bool.isRequired,
-    data: PropTypes.array,
-    error: PropTypes.shape({}),
-  }).isRequired,
+  isLoading: PropTypes.func.isRequired,
+  loadedWithErrors: PropTypes.func.isRequired,
+  post: PropTypes.arrayOf(PropTypes.object),
 };
 
-export default holocronModule({
-  name: 'infoxicator-content',
-  reducer,
-})(InfoxicatorContent);
+InfoxicatorContent.defaultProps = {
+  post: [],
+};
+
+// const load = () => (dispatch) => dispatch(loadModule('my-module'));
+
+export default compose(
+  connectAsync({ loadDataAsProps }),
+  holocronModule({
+    name: 'infoxicator-content',
+    // load,
+    // options: { ssr: true },
+    reducer,
+  })
+)(InfoxicatorContent);
