@@ -2,9 +2,9 @@ import {
   fromJS,
 } from 'immutable';
 
-export const REQUEST = 'modules/infoxicator-main/REQUEST';
-export const SUCCESS = 'modules/infoxicator-main/SUCCESS';
-export const FAILURE = 'modules/infoxicator-main/FAILURE';
+export const REQUEST = 'modules/infoxicator-content/REQUEST';
+export const SUCCESS = 'modules/infoxicator-content/SUCCESS';
+export const FAILURE = 'modules/infoxicator-content/FAILURE';
 
 function buildInitialState() {
   return fromJS({
