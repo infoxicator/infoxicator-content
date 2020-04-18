@@ -12,9 +12,18 @@
     "watch:build": "npm run build -- --watch",
     "test": "jest"
   },
+  "one-amex": {
+    "bundler": {
+      "purgecss": {
+        "disabled": true
+      }
+    }
+  },
   "dependencies": {
     "@americanexpress/one-app-bundler": "^6.0.0",
     "@americanexpress/one-app-router": "^1.0.0",
+    "@material-ui/core": "^4.9.10",
+    "@material-ui/lab": "^4.0.0-alpha.50",
     "content-security-policy-builder": "^2.1.0",
     "holocron": "^1.0.0",
     "iguazu": "^3.0.2",
@@ -22,8 +31,11 @@
     "iguazu-rest": "^1.8.0",
     "iguazu-rpc": "^1.5.0",
     "immutable": "^4.0.0-rc.12",
+    "install": "^0.13.0",
     "ip": "^1.1.5",
+    "npm": "^6.14.4",
     "object-hash": "^2.0.3",
+    "prismjs": "^1.20.0",
     "prop-types": "^15.7.2",
     "react": "^16.12.0",
     "react-helmet": "^5.2.1",
@@ -32,6 +44,7 @@
   },
   "devDependencies": {
     "babel-eslint": "^8.2.6",
+    "babel-plugin-prismjs": "^2.0.1",
     "babel-preset-amex": "^3.2.0",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.2",
