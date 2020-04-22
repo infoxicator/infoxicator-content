@@ -24,7 +24,9 @@
     "@americanexpress/one-app-router": "^1.0.0",
     "@material-ui/core": "^4.9.10",
     "@material-ui/lab": "^4.0.0-alpha.50",
+    "bootstrap": "^4.4.1",
     "content-security-policy-builder": "^2.1.0",
+    "dayjs": "^1.8.25",
     "holocron": "^1.0.0",
     "iguazu": "^3.0.2",
     "iguazu-holocron": "^1.0.0",
@@ -38,6 +40,7 @@
     "prismjs": "^1.20.0",
     "prop-types": "^15.7.2",
     "react": "^16.12.0",
+    "react-bootstrap": "^1.0.0",
     "react-helmet": "^5.2.1",
     "redux": "^4.0.5",
     "redux-immutable": "^4.0.0"

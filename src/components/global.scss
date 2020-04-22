@@ -1,0 +1,22 @@
+:global {
+  .wp-block-code {
+    border-radius: 10px !important;
+  }
+  div.code-toolbar > .toolbar {
+    position: absolute;
+    bottom: .7em;
+    right: .4em;
+  }
+  div.code-toolbar {
+    position: relative;
+  }
+  div.code-toolbar > .toolbar button {
+    color: #bbb;
+    font-size: .8em;
+    padding: 0 .5em;
+    background: #f5f2f0;
+    background: rgba(224, 224, 224, 0.2);
+    box-shadow: 0 2px 0 0 rgba(0,0,0,0.2);
+    border-radius: .5em;
+  }
+}

@@ -1,48 +1,27 @@
 /* eslint-disable react/no-danger */
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import './styles.scss';
-import { makeStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
+import './global.scss';
+import dayjs from 'dayjs';
+import Container from 'react-bootstrap/Container';
 import Prism from 'prismjs';
-import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
+import styles from './styles.scss';
 
 const createMarkup = (markup) => ({ __html: markup });
-
-const useStyles = makeStyles((theme) => ({
-  htmlContent: {
-    ...theme.typography.body1,
-    padding: theme.spacing(3, 0),
-    fontSize: '1.25rem',
-  },
-  mainGrid: {
-    marginTop: theme.spacing(3),
-  },
-}));
 
 const BlogPost = ({ post, SideBar }) => {
   useEffect(() => {
     Prism.highlightAll();
   });
-  const classes = useStyles();
 
   return (
-    <Grid container={true} spacing={5} className={classes.mainGrid}>
-      <Grid item={true} xs={12} md={8}>
-        <Typography variant="h3" gutterBottom={true}>
-          {post.title.rendered}
-        </Typography>
-        <Divider />
-        <div className={classes.htmlContent}>
-          <p dangerouslySetInnerHTML={createMarkup(post.excerpt.rendered)} />
-          <div dangerouslySetInnerHTML={createMarkup(post.content.rendered)} />
-        </div>
-      </Grid>
-      <Grid item={true} xs={12} md={4}>
-        <SideBar hideImage={true} />
-      </Grid>
-    </Grid>
+    <Container fluid={true}>
+      <h1 className={styles.postTitle}>{post.title.rendered}</h1>
+      <p className="mt-3">Published {dayjs(post.date).format('MMMM DD, YYYY')}</p>
+      <div className={`${styles.line} mb-5`} />
+      <div className={`${styles.article} mb-5`} dangerouslySetInnerHTML={createMarkup(post.content.rendered)} />
+      <Container> <SideBar hideImage={true} postTitle="Popular Posts" /></Container>
+    </Container>
   );
 };
 

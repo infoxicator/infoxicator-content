@@ -1,5 +1,18 @@
-:global {
-  .wp-block-code {
-    border-radius: 10px !important;
+.postTitle {
+  font-weight: 900;
+  font-size: 3.5rem;
+}
+.line {
+  border-bottom: 7px solid;
+  max-width: 30%;
+  color: #004953;
+}
+.article {
+  p {
+    font-size: 1.5rem !important;
+  }
+  a {
+    color: #008ca0;
+    text-decoration: none;
   }
 }
