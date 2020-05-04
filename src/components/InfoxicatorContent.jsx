@@ -1,22 +1,32 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { configureIguazuSSR, queryModuleWithData } from 'iguazu-holocron';
 import { connectAsync } from 'iguazu';
 import PropTypes from 'prop-types';
 import { queryProcedureResult } from 'iguazu-rpc';
 import reducer from '../duck';
 import BlogPost from './BlogPost';
+import ErrorPage from './ErrorPage';
 import LoadingSkeleton from './LoadingSkeleton';
 
 const InfoxicatorContent = ({
-  isLoading, loadedWithErrors, post, SideBar,
+  isLoading, loadedWithErrors, post, SideBar, router: { location },
 }) => {
+  useEffect(() => {
+    try {
+      window.scroll({
+        top: 0,
+        left: 0,
+      });
+    } catch (error) {
+      window.scrollTo(0, 0);
+    }
+  }, [location]);
   if (isLoading()) return <LoadingSkeleton />;
-  if (loadedWithErrors()) return <h1> Something went wrong...</h1>;
+  if (loadedWithErrors()) return <ErrorPage />;
   return (
-    <div>
+    <React.Fragment>
       <BlogPost post={post[0]} SideBar={SideBar} />
-    </div>
-
+    </React.Fragment>
   );
 };
 
@@ -41,6 +51,7 @@ InfoxicatorContent.propTypes = {
   loadedWithErrors: PropTypes.func.isRequired,
   post: PropTypes.arrayOf(PropTypes.object),
   SideBar: PropTypes.oneOfType([PropTypes.shape({}), PropTypes.func]),
+  router: PropTypes.shape({ location: PropTypes.shape({}) }).isRequired,
 };
 
 InfoxicatorContent.defaultProps = {
