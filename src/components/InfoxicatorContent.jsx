@@ -3,6 +3,7 @@ import { configureIguazuSSR, queryModuleWithData } from 'iguazu-holocron';
 import { connectAsync } from 'iguazu';
 import PropTypes from 'prop-types';
 import { queryProcedureResult } from 'iguazu-rpc';
+import Container from 'react-bootstrap/Container';
 import reducer from '../duck';
 import BlogPost from './BlogPost';
 import ErrorPage from './ErrorPage';
@@ -22,11 +23,11 @@ const InfoxicatorContent = ({
     }
   }, [location]);
   if (isLoading()) return <LoadingSkeleton />;
-  if (loadedWithErrors()) return <ErrorPage />;
+  if (loadedWithErrors() || (!Array.isArray(post) || !post.length)) return <ErrorPage />;
   return (
-    <React.Fragment>
+    <Container fluid="md" className="mt-5">
       <BlogPost post={post[0]} SideBar={SideBar} />
-    </React.Fragment>
+    </Container>
   );
 };
 

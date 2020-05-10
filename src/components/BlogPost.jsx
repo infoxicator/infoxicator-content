@@ -25,11 +25,11 @@ const BlogPost = ({ post, SideBar }) => {
         author="Ruben Casas"
         description={post.excerpt.rendered}
         keywords={keywords}
-        siteUrl="https://infoxicator.com"
         title={post.title.rendered}
         image={{ src: mediaImage }}
-        locale="en-GB"
+        lang="en-GB"
         meta={[{ charset: 'utf-8' }]}
+        pathname={`https://infoxicator.com/${post.slug}`}
       />
       <Container fluid={true}>
         <h1 className={styles.postTitle}>{post.title.rendered}</h1>

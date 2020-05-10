@@ -3,7 +3,7 @@ import Skeleton from '@material-ui/lab/Skeleton';
 import Container from 'react-bootstrap/Container';
 
 const LoadingSkeleton = () => (
-  <Container fluid={true}>
+  <Container fluid="md" className="mt-5">
     <Skeleton animation="wave" height={70} width="60%" />
     <Skeleton animation="wave" width="20%" className="mt-3" />
     <Skeleton animation="wave" height={10} width="30%" />
