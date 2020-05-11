@@ -1,3 +1,9 @@
 {
-  "presets": ["amex"]
+  "presets": ["amex"],
+  "plugins": [
+    ["prismjs", {
+      "languages": ["javascript", "css", "html", "jsx"],
+      "plugins": ["line-numbers", "copy-to-clipboard"]
+    }]
+  ]
 }

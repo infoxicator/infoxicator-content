@@ -1,6 +1,6 @@
 ## Project Specific
 #################
-
+.vscode
 # node/npm
 node_modules
 *.log
