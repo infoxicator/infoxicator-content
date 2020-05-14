@@ -9,8 +9,7 @@
     "clean": "rimraf build",
     "prepare": "npm run build",
     "lint": "eslint --ignore-path .gitignore --ext js,jsx .",
-    "watch:build": "npm run build -- --watch",
-    "test": "jest"
+    "watch:build": "npm run build -- --watch"
   },
   "one-amex": {
     "bundler": {

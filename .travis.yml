@@ -1,0 +1,26 @@
+env:
+  - NODE_ENV="production"
+language: node_js
+node_js:
+  - "12"
+install: NODE_ENV=development npm ci
+before_deploy: "node ./scripts/updateModuleMap.js"
+deploy:
+  - provider: s3
+    access_key_id: $AWS_ACCESS_KEY
+    secret_access_key: $AWS_SECRET_KEY
+    bucket: one-app-modules
+    skip_cleanup: true
+    acl: public_read
+    local_dir: build/
+    upload-dir: infoxicator/infoxicator-content
+    region: eu-west-2
+  - provider: s3
+    access_key_id: $AWS_ACCESS_KEY
+    secret_access_key: $AWS_SECRET_KEY
+    bucket: one-app-modules
+    skip_cleanup: true
+    acl: public_read
+    upload-dir: infoxicator
+    local_dir: module_map
+    region: eu-west-2

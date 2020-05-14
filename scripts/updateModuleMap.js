@@ -5,9 +5,9 @@ const { name, version } = require('../package.json');
 // This is created during the build process within the deploy action
 const bundleIntegrity = require('../bundle.integrity.manifest.json');
 
-const moduleMapUrl = 'https://infoxicator-map.now.sh/'; // This is the module map URL you got in the previous step
+const moduleMapUrl = 'https://one-app-modules.s3.eu-west-2.amazonaws.com/infoxicator/module-map.json';
 
-const STATIC_ASSETS_URL = 'https://infoxicator-content.now.sh/'; // example 'https://my-module.now.sh'
+const STATIC_ASSETS_URL = 'https://one-app-modules.s3.eu-west-2.amazonaws.com/infoxicator';
 
 const updateModuleMap = async () => {
   try {
@@ -18,15 +18,15 @@ const updateModuleMap = async () => {
 
     moduleMapContent.modules[name] = {
       browser: {
-        url: `${STATIC_ASSETS_URL}/${version}/${name}.browser.js`,
+        url: `${STATIC_ASSETS_URL}/${name}/${version}/${name}.browser.js`,
         integrity: bundleIntegrity.browser,
       },
       legacyBrowser: {
-        url: `${STATIC_ASSETS_URL}/${version}/${name}.legacy.browser.js`,
+        url: `${STATIC_ASSETS_URL}/${name}/${version}/${name}.legacy.browser.js`,
         integrity: bundleIntegrity.legacyBrowser,
       },
       node: {
-        url: `${STATIC_ASSETS_URL}/${version}/${name}.node.js`,
+        url: `${STATIC_ASSETS_URL}/${name}/${version}/${name}.node.js`,
         integrity: bundleIntegrity.node,
       },
     };
