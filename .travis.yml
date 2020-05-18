@@ -4,6 +4,7 @@ language: node_js
 node_js:
   - "12"
 install: NODE_ENV=development npm ci
+script: NODE_ENV=production npm run build
 before_deploy: "node ./scripts/updateModuleMap.js"
 deploy:
   - provider: s3
