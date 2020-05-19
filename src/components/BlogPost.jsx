@@ -13,7 +13,7 @@ const createMarkup = (markup) => ({ __html: markup });
 const BlogPost = ({ post, SideBar }) => {
   const mediaImage = post.better_featured_image
   && post.better_featured_image.media_details.sizes.medium.source_url;
-  const keywords = post.afc && post.acf.meta_keywords.split(', ');
+  const keywords = ((post || {}).acf || {}).meta_keywords || '';
   useEffect(() => {
     Prism.highlightAll();
   });
@@ -24,7 +24,7 @@ const BlogPost = ({ post, SideBar }) => {
         article={true}
         author="Ruben Casas"
         description={post.excerpt.rendered}
-        keywords={keywords}
+        keywords={keywords.split(', ')}
         title={post.title.rendered}
         image={{ src: mediaImage }}
         lang="en-GB"

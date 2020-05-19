@@ -9,7 +9,7 @@ const ErrorPage = () => (
     <h3>Just kidding, you probably found a dead link...</h3>
     <div className="my-5">
       <a href="/">
-        <Image src="http://www.infoxication.net/wp-content/uploads/2020/04/3ye8qz.jpg" width={250} height={250} rounded={true} fluid={true} />
+        <Image src="https://www.infoxication.net/wp-content/uploads/2020/04/3ye8qz.jpg" width={250} height={250} rounded={true} fluid={true} />
       </a>
     </div>
   </Container>

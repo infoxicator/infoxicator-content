@@ -2,7 +2,7 @@
   "presets": ["amex"],
   "plugins": [
     ["prismjs", {
-      "languages": ["javascript", "css", "html", "jsx"],
+      "languages": ["javascript", "css", "html", "jsx", "json"],
       "plugins": ["line-numbers", "copy-to-clipboard"]
     }]
   ]
