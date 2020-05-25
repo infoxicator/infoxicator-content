@@ -6,11 +6,12 @@ import dayjs from 'dayjs';
 import Container from 'react-bootstrap/Container';
 import Prism from 'prismjs';
 import SEO from '@americanexpress/react-seo';
+import { RenderModule } from 'holocron';
 import styles from './styles.scss';
 
 const createMarkup = (markup) => ({ __html: markup });
 
-const BlogPost = ({ post, SideBar }) => {
+const BlogPost = ({ post }) => {
   const mediaImage = post.better_featured_image
   && post.better_featured_image.media_details.sizes.medium.source_url;
   const keywords = ((post || {}).acf || {}).meta_keywords || '';
@@ -36,7 +37,7 @@ const BlogPost = ({ post, SideBar }) => {
         <p className="mt-3">Published {dayjs(post.date).format('MMMM DD, YYYY')}</p>
         <div className={`${styles.line} mb-5`} />
         <div className={`${styles.article} mb-5`} dangerouslySetInnerHTML={createMarkup(post.content.rendered)} />
-        <Container> <SideBar hideImage={true} postTitle="Popular Posts" /></Container>
+        <RenderModule moduleName="infoxicator-main" props={{ hideImage: true, postTitle: 'Popular Posts' }} />
       </Container>
     </React.Fragment>
   );

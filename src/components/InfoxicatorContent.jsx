@@ -1,68 +1,75 @@
 import React, { useEffect } from 'react';
-import { configureIguazuSSR, queryModuleWithData } from 'iguazu-holocron';
-import { connectAsync } from 'iguazu';
 import PropTypes from 'prop-types';
-import { queryProcedureResult } from 'iguazu-rpc';
 import Container from 'react-bootstrap/Container';
-import reducer from '../duck';
+import { loadModule } from 'holocron';
+import reducer, { REQUEST, SUCCESS, FAILURE } from '../duck';
 import BlogPost from './BlogPost';
 import ErrorPage from './ErrorPage';
 import LoadingSkeleton from './LoadingSkeleton';
 
 const InfoxicatorContent = ({
-  isLoading, loadedWithErrors, post, SideBar, router: { location },
+  moduleState, router: { location },
 }) => {
+  const { isLoading, error, post } = moduleState;
   useEffect(() => {
     try {
       window.scroll({
         top: 0,
         left: 0,
       });
-    } catch (error) {
+    } catch (err) {
       window.scrollTo(0, 0);
     }
   }, [location]);
-  if (isLoading()) return <LoadingSkeleton />;
-  if (loadedWithErrors() || (!Array.isArray(post) || !post.length)) return <ErrorPage />;
+  if (isLoading) return <LoadingSkeleton />;
+  if (error || (!Array.isArray(post) || !post.length)) return <ErrorPage />;
   return (
     <Container fluid="md" className="mt-5">
-      <BlogPost post={post[0]} SideBar={SideBar} />
+      <BlogPost post={post[0]} />
     </Container>
   );
 };
 
-function loadDataAsProps({ store: { dispatch }, ownProps: { params: { postSlug } } }) {
+const loadModuleData = async ({ store: { dispatch, getState }, fetchClient, ownProps: { params: { postSlug } } }) => {
   const apiUrl = `https://www.infoxication.net/wp-json/wp/v2/posts/?slug=${postSlug}`;
-  return {
-    post: () => dispatch(queryProcedureResult({ procedureName: 'readPost', args: { api: apiUrl } })),
-    SideBar: () => dispatch(queryModuleWithData('infoxicator-main')),
-  };
-}
+  const moduleState = getState().getIn(['modules', 'infoxicator-content']);
+  if (moduleState.get('isComplete') && moduleState.get('post')) {
+    return;
+  }
+  try {
+    dispatch({ type: REQUEST });
+    const response = await fetchClient(apiUrl);
+    const post = await response.json();
+    dispatch(loadModule('infoxicator-main'));
+    dispatch({
+      type: SUCCESS,
+      data: post,
+    });
+  } catch (err) {
+    dispatch({
+      type: FAILURE,
+      error: err,
+    });
+  }
+};
 
-loadDataAsProps.ssr = true;
-InfoxicatorContent.loadDataAsProps = loadDataAsProps;
-
-if (!global.BROWSER) {
-  InfoxicatorContent.loadModuleData = configureIguazuSSR;
-}
+const shouldModuleReload = (oldProps, newProps) => oldProps.router.location.pathname !== newProps.router.location.pathname;
 
 
 InfoxicatorContent.propTypes = {
-  isLoading: PropTypes.func.isRequired,
-  loadedWithErrors: PropTypes.func.isRequired,
   post: PropTypes.arrayOf(PropTypes.object),
-  SideBar: PropTypes.oneOfType([PropTypes.shape({}), PropTypes.func]),
   router: PropTypes.shape({ location: PropTypes.shape({}) }).isRequired,
 };
 
 InfoxicatorContent.defaultProps = {
   post: [],
-  SideBar: {},
 };
 
 InfoxicatorContent.holocron = {
   name: 'infoxicator-content',
   reducer,
+  shouldModuleReload,
+  loadModuleData,
 };
 
-export default connectAsync({ loadDataAsProps })(InfoxicatorContent);
+export default InfoxicatorContent;
