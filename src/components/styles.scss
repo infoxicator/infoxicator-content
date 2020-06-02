@@ -4,9 +4,15 @@
 }
 .line {
   border-bottom: 7px solid;
+  color: #004953;
+}
+
+.halfLine {
+  border-bottom: 7px solid;
   max-width: 30%;
   color: #004953;
 }
+
 .article {
   p {
     font-size: 1.5rem !important;
@@ -14,5 +20,17 @@
   a {
     color: #008ca0;
     text-decoration: none;
+  }
+  h2 {
+    margin-top: 2.5rem;
+  }
+  figure {
+    width: 100%;
+    margin: 0;
+    img {
+      height: auto;
+      vertical-align: bottom;
+      width: 100%;
+    }
   }
 }

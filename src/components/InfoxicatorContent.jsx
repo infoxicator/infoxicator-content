@@ -10,7 +10,7 @@ import ErrorPage from './ErrorPage';
 import LoadingSkeleton from './LoadingSkeleton';
 
 const InfoxicatorContent = ({
-  isLoading, loadedWithErrors, post, SideBar, router: { location },
+  isLoading, loadedWithErrors, post, RecentPosts, router: { location },
 }) => {
   useEffect(() => {
     try {
@@ -26,7 +26,7 @@ const InfoxicatorContent = ({
   if (loadedWithErrors() || (!Array.isArray(post) || !post.length)) return <ErrorPage />;
   return (
     <Container fluid="md" className="mt-5">
-      <BlogPost post={post[0]} SideBar={SideBar} />
+      <BlogPost post={post[0]} RecentPosts={RecentPosts} />
     </Container>
   );
 };
@@ -35,7 +35,7 @@ function loadDataAsProps({ store: { dispatch }, ownProps: { params: { postSlug }
   const apiUrl = `https://www.infoxication.net/wp-json/wp/v2/posts/?slug=${postSlug}`;
   return {
     post: () => dispatch(queryProcedureResult({ procedureName: 'readPost', args: { api: apiUrl } })),
-    SideBar: () => dispatch(queryModuleWithData('infoxicator-main')),
+    RecentPosts: () => dispatch(queryModuleWithData('infoxicator-posts')),
   };
 }
 
@@ -51,13 +51,13 @@ InfoxicatorContent.propTypes = {
   isLoading: PropTypes.func.isRequired,
   loadedWithErrors: PropTypes.func.isRequired,
   post: PropTypes.arrayOf(PropTypes.object),
-  SideBar: PropTypes.oneOfType([PropTypes.shape({}), PropTypes.func]),
+  RecentPosts: PropTypes.oneOfType([PropTypes.shape({}), PropTypes.func]),
   router: PropTypes.shape({ location: PropTypes.shape({}) }).isRequired,
 };
 
 InfoxicatorContent.defaultProps = {
   post: [],
-  SideBar: {},
+  RecentPosts: {},
 };
 
 InfoxicatorContent.holocron = {
