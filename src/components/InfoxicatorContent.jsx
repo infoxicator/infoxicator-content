@@ -2,9 +2,8 @@ import React, { useEffect } from 'react';
 import { configureIguazuSSR, queryModuleWithData } from 'iguazu-holocron';
 import { connectAsync } from 'iguazu';
 import PropTypes from 'prop-types';
-import { queryProcedureResult } from 'iguazu-rpc';
+import { queryCollection } from 'iguazu-rest';
 import Container from 'react-bootstrap/Container';
-import reducer from '../duck';
 import BlogPost from './BlogPost';
 import ErrorPage from './ErrorPage';
 import LoadingSkeleton from './LoadingSkeleton';
@@ -31,22 +30,6 @@ const InfoxicatorContent = ({
   );
 };
 
-function loadDataAsProps({ store: { dispatch }, ownProps: { params: { postSlug } } }) {
-  const apiUrl = `https://www.infoxication.net/wp-json/wp/v2/posts/?slug=${postSlug}`;
-  return {
-    post: () => dispatch(queryProcedureResult({ procedureName: 'readPost', args: { api: apiUrl } })),
-    RecentPosts: () => dispatch(queryModuleWithData('infoxicator-posts')),
-  };
-}
-
-loadDataAsProps.ssr = true;
-InfoxicatorContent.loadDataAsProps = loadDataAsProps;
-
-if (!global.BROWSER) {
-  InfoxicatorContent.loadModuleData = configureIguazuSSR;
-}
-
-
 InfoxicatorContent.propTypes = {
   isLoading: PropTypes.func.isRequired,
   loadedWithErrors: PropTypes.func.isRequired,
@@ -62,7 +45,16 @@ InfoxicatorContent.defaultProps = {
 
 InfoxicatorContent.holocron = {
   name: 'infoxicator-content',
-  reducer,
+  loadModuleData: async ({ store, module, ownProps }) => {
+    await configureIguazuSSR({ store, module, ownProps });
+  },
 };
+
+export const loadDataAsProps = ({ store: { dispatch }, ownProps: { params: { postSlug } } }) => ({
+  post: () => dispatch(queryCollection({ resource: 'post', id: { postSlug } })),
+  RecentPosts: () => dispatch(queryModuleWithData('infoxicator-posts')),
+});
+
+loadDataAsProps.ssr = true;
 
 export default connectAsync({ loadDataAsProps })(InfoxicatorContent);
