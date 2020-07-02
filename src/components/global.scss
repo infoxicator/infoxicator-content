@@ -9,6 +9,8 @@
   }
   div.code-toolbar {
     position: relative;
+    margin-top: 3rem;
+    margin-bottom: 3rem;
   }
   div.code-toolbar > .toolbar button {
     color: #bbb;
@@ -18,5 +20,10 @@
     background: rgba(224, 224, 224, 0.2);
     box-shadow: 0 2px 0 0 rgba(0,0,0,0.2);
     border-radius: .5em;
+  }
+  .wp-block-separator {
+    border-bottom: 3px solid;
+    margin-bottom: 3rem;
+    color: #004953;
   }
 }

@@ -13,6 +13,11 @@
   color: #004953;
 }
 
+code-toolbar {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
 .article {
   p {
     font-size: 1.5rem !important;
@@ -22,12 +27,22 @@
     text-decoration: none;
   }
   h2 {
-    margin-top: 2.5rem;
+    margin-top: 3rem;
+    margin-bottom: 2rem;
+  }
+  blockquote {
+    font-style: italic;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    padding-left: 1rem;
+    border-left: 3px solid #004953;
   }
   figure {
     width: 100%;
     margin: 0;
     img {
+      margin-top: 2rem;
+      margin-bottom: 2rem;
       height: auto;
       vertical-align: bottom;
       width: 100%;
