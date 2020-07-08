@@ -62,10 +62,11 @@ export const loadDataAsProps = ({
 }) => {
   const localeName = getState().getIn(['intl', 'activeLocale']);
   const fallbackLocale = localeName.startsWith('es') ? 'es-ES' : 'en-GB';
+  console.log('fallbacklocale', fallbackLocale);
   return {
     post: () => dispatch(queryCollection({ resource: 'post', id: { postSlug } })),
     RecentPosts: () => dispatch(queryModuleWithData('infoxicator-posts')),
-    languageData: () => dispatch(queryLanguagePack('infoxicator-content', { fallbackLocale })),
+    languageData: () => dispatch(queryLanguagePack('infoxicator-content', { fallbackLocale: 'en-GB' })),
   };
 };
 
