@@ -10,7 +10,14 @@ import ErrorPage from './ErrorPage';
 import LoadingSkeleton from './LoadingSkeleton';
 
 const InfoxicatorContent = ({
-  isLoading, loadedWithErrors, post, RecentPosts, router: { location }, languageData, localeName,
+  isLoading,
+  loadedWithErrors,
+  post,
+  RecentPosts,
+  router: { location },
+  languageData,
+  localeName,
+  loadErrors,
 }) => {
   useEffect(() => {
     try {
@@ -23,7 +30,9 @@ const InfoxicatorContent = ({
     }
   }, [location]);
   if (isLoading()) return <LoadingSkeleton />;
-  if (loadedWithErrors() || (!Array.isArray(post) || !post.length)) return <ErrorPage languageData={languageData} />;
+  if (loadedWithErrors() || (!Array.isArray(post) || !post.length)) {
+    return <ErrorPage languageData={languageData} loadErrors={loadErrors} />;
+  }
   return (
     <Container fluid="md" className="mt-5">
       <BlogPost
@@ -62,11 +71,10 @@ export const loadDataAsProps = ({
 }) => {
   const localeName = getState().getIn(['intl', 'activeLocale']);
   const fallbackLocale = localeName.startsWith('es') ? 'es-ES' : 'en-GB';
-  console.log('fallbacklocale', fallbackLocale);
   return {
+    languageData: () => dispatch(queryLanguagePack('infoxicator-content', { fallbackLocale: 'en-GB' })),
     post: () => dispatch(queryCollection({ resource: 'post', id: { postSlug } })),
     RecentPosts: () => dispatch(queryModuleWithData('infoxicator-posts')),
-    languageData: () => dispatch(queryLanguagePack('infoxicator-content', { fallbackLocale: 'en-GB' })),
   };
 };
 
