@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { configureIguazuSSR, queryModuleWithData } from 'iguazu-holocron';
+import { queryLanguagePack } from '@americanexpress/one-app-ducks';
 import { connectAsync } from 'iguazu';
 import PropTypes from 'prop-types';
 import { queryCollection } from 'iguazu-rest';
@@ -9,7 +10,7 @@ import ErrorPage from './ErrorPage';
 import LoadingSkeleton from './LoadingSkeleton';
 
 const InfoxicatorContent = ({
-  isLoading, loadedWithErrors, post, RecentPosts, router: { location },
+  isLoading, loadedWithErrors, post, RecentPosts, router: { location }, languageData, localeName,
 }) => {
   useEffect(() => {
     try {
@@ -22,10 +23,15 @@ const InfoxicatorContent = ({
     }
   }, [location]);
   if (isLoading()) return <LoadingSkeleton />;
-  if (loadedWithErrors() || (!Array.isArray(post) || !post.length)) return <ErrorPage />;
+  if (loadedWithErrors() || (!Array.isArray(post) || !post.length)) return <ErrorPage languageData={languageData} />;
   return (
     <Container fluid="md" className="mt-5">
-      <BlogPost post={post[0]} RecentPosts={RecentPosts} />
+      <BlogPost
+        post={post[0]}
+        RecentPosts={RecentPosts}
+        languageData={languageData}
+        localeName={localeName}
+      />
     </Container>
   );
 };
@@ -50,10 +56,18 @@ InfoxicatorContent.holocron = {
   },
 };
 
-export const loadDataAsProps = ({ store: { dispatch }, ownProps: { params: { postSlug } } }) => ({
-  post: () => dispatch(queryCollection({ resource: 'post', id: { postSlug } })),
-  RecentPosts: () => dispatch(queryModuleWithData('infoxicator-posts')),
-});
+export const loadDataAsProps = ({
+  store: { dispatch, getState },
+  ownProps: { params: { postSlug } },
+}) => {
+  const localeName = getState().getIn(['intl', 'activeLocale']);
+  const fallbackLocale = localeName.startsWith('es') ? 'es-ES' : 'en-GB';
+  return {
+    post: () => dispatch(queryCollection({ resource: 'post', id: { postSlug } })),
+    RecentPosts: () => dispatch(queryModuleWithData('infoxicator-posts')),
+    languageData: () => dispatch(queryLanguagePack('infoxicator-content', { fallbackLocale })),
+  };
+};
 
 loadDataAsProps.ssr = true;
 
