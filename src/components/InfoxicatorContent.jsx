@@ -4,6 +4,8 @@ import { queryLanguagePack } from '@americanexpress/one-app-ducks';
 import { connectAsync } from 'iguazu';
 import PropTypes from 'prop-types';
 import { queryCollection } from 'iguazu-rest';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
 import Container from 'react-bootstrap/Container';
 import BlogPost from './BlogPost';
 import ErrorPage from './ErrorPage';
@@ -56,6 +58,10 @@ InfoxicatorContent.holocron = {
   },
 };
 
+const mapStateToProps = (state) => ({
+  localeName: state.getIn(['intl', 'activeLocale']),
+});
+
 export const loadDataAsProps = ({
   store: { dispatch, getState },
   ownProps: { params: { postSlug } },
@@ -71,4 +77,7 @@ export const loadDataAsProps = ({
 
 loadDataAsProps.ssr = true;
 
-export default connectAsync({ loadDataAsProps })(InfoxicatorContent);
+export default compose(
+  connect(mapStateToProps, null),
+  connectAsync({ loadDataAsProps })
+)(InfoxicatorContent);

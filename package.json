@@ -1,9 +1,10 @@
 {
   "name": "infoxicator-content",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "description": "",
   "contributors": [],
   "scripts": {
+    "start": "one-app-runner",
     "prebuild": "npm run clean",
     "build": "bundle-module",
     "clean": "rimraf build",
@@ -21,6 +22,14 @@
       "purgecss": {
         "disabled": true
       }
+    },
+    "runner": {
+      "modules": [
+        "."
+      ],
+      "rootModuleName": "infoxicator-root",
+      "moduleMapUrl": "https://one-app-modules.s3.eu-west-2.amazonaws.com/infoxicator/module-map.json",
+      "dockerImage": "oneamex/one-app-dev:5.2.1"
     }
   },
   "dependencies": {
@@ -43,11 +52,13 @@
     "react": "^16.12.0",
     "react-bootstrap": "^1.0.0",
     "react-helmet": "^5.2.1",
+    "react-redux": "^7.2.0",
     "redux": "^4.0.5",
     "redux-immutable": "^4.0.0"
   },
   "devDependencies": {
     "@americanexpress/one-app-bundler": "^6.5.0",
+    "@americanexpress/one-app-runner": "^6.7.0",
     "babel-eslint": "^8.2.6",
     "babel-plugin-prismjs": "^2.0.1",
     "babel-preset-amex": "^3.2.0",
